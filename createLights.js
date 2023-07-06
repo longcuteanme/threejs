@@ -30,6 +30,7 @@ export default function createLights(scene) {
   // nhưng cũng càng nặng nề hơn
   shadowLight.shadow.mapSize.width = 2048;
   shadowLight.shadow.mapSize.height = 2048;
+  shadowLight.intensity = 0.7;
 
   // thêm vào scene để kích hoạt
   scene.add(hemisphereLight);

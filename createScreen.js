@@ -8,7 +8,7 @@ const aspectRatio = WIDTH / HEIGHT;
 const fieldOfView = 60;
 const nearPlane = 1;
 const farPlane = 10000;
-const cameraPosition = { x: 0, y: 1500, z: 0 };
+const cameraPosition = { x: 0, y: 230, z: 0 };
 
 export default function createScene() {
   const scene = new THREE.Scene();
@@ -22,7 +22,7 @@ export default function createScene() {
     farPlane
   );
   camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-  camera.lookAt(0, 0, 0);
+  camera.lookAt(0, 230, -200);
 
   const renderer = new THREE.WebGLRenderer({
     //de cho nen canvas trong suot

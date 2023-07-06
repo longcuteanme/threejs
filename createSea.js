@@ -1,16 +1,22 @@
 import * as THREE from "three";
 import { Color } from "./constant";
-import { randomRange } from "./util";
+import { randomPositive, randomRange } from "./util";
 
 const positionY = -350;
 const positionZ = 200;
 
-const numberOfIslandRandom = 10;
-const spinSpeed = 0.002;
+const numberOfIslandRandomMax = 100;
+const numberOfIslandRandomMin = 70;
+const numberOfCloudRandomMax = 100;
+const numberOfCloudRandomMin = 70;
+const spinSpeed = 0.0005;
 
 class Sea {
   constructor() {
-    const geom = new THREE.TorusGeometry(300, 530, 20, 30, Math.PI * 2);
+    this.mesh = new THREE.Object3D();
+
+    // tao bien //////////////////////////////////////////////////////
+    const geom = new THREE.TorusGeometry(350, 530, 20, 30, Math.PI * 2);
     geom.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
     const mat = new THREE.MeshPhongMaterial({
@@ -19,50 +25,56 @@ class Sea {
       // opacity: 1,
       shading: THREE.FlatShading,
       shininess: 70,
-      wireframe: true,
+      // wireframe: true,
     });
 
     const seaSurface = new THREE.Mesh(geom, mat);
     seaSurface.receiveShadow = true;
     seaSurface.position.y = positionY;
-    seaSurface.position.z = positionZ;
+    // seaSurface.position.z = positionZ;
+    seaSurface.castShadow = true;
+    seaSurface.receiveShadow = true;
 
-    const numberIsland = Math.round(Math.random() * numberOfIslandRandom);
-    console.log(numberIsland);
+    this.mesh.add(seaSurface);
 
-    this.island = [];
+    // tao dao //////////////////////////////////////////////////////
 
+    const numberIsland = randomRange(
+      numberOfIslandRandomMin,
+      numberOfIslandRandomMax
+    );
+
+    const matIsland = new THREE.MeshLambertMaterial({ color: Color.island });
     for (let i = 0; i < numberIsland; i++) {
-      const islandWidth = randomRange(100, 120);
       const geomIsland = new THREE.BoxGeometry(
-        islandWidth,
-        islandWidth,
-        islandWidth
+        randomRange(15, 20),
+        randomRange(15, 20),
+        randomRange(15, 20)
       );
-      const matIsland = new THREE.MeshBasicMaterial({ color: Color.island });
+      const islandRotationX = randomRange(0, 2 * Math.PI);
+      const islandRotationY = randomRange(0, 2 * Math.PI);
+      const islandRotationZ = randomRange(0, 2 * Math.PI);
       const island = new THREE.Mesh(geomIsland, matIsland);
-      island.position.set(randomRange(-600, 600), 200, randomRange(-600, 600));
-      this.island.push(island);
+      const x = randomPositive() * randomRange(0, 300);
+      const radius = randomRange(x * x, 90000);
+      const z = randomPositive() * Math.sqrt(radius - x * x);
+      const y = randomRange(163, 167);
+      island.position.set(x, y, z);
+      island.rotation.set(islandRotationX, islandRotationY, islandRotationZ);
+      island.castShadow = true;
+      island.receiveShadow = true;
+
+      this.mesh.add(island);
     }
-
-    console.log("island", this.island.length);
-
-    this.seaSurface = seaSurface;
   }
 
   spin() {
-    this.seaSurface.rotation.y += spinSpeed;
-    for (const item of this.island) {
-      item.rotateY(spinSpeed);
-    }
+    this.mesh.rotation.y += spinSpeed;
   }
 }
 
 export default function createSea(scene) {
   const sea = new Sea();
-  scene.add(sea.seaSurface);
-  for (const item of sea.island) {
-    scene.add(item);
-  }
+  scene.add(sea.mesh);
   return sea;
 }
