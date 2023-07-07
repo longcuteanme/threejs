@@ -3,13 +3,10 @@ import * as THREE from "three";
 var hemisphereLight, shadowLight;
 
 export default function createLights(scene) {
-  // Nguồn sáng bán cầu là loại có màu tô chuyển (gradient)
-  // tham số đầu tiên là màu trời, thứ 2 là màu đất,
-  // thứ 3 là cường độ ánh sáng
+  // Nguồn sáng
   hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 0.9);
 
   // Nguồn sáng có hướng tỏa ra từ 1 vị trí nhất định
-  // Nó giống như mặt trời, nghĩa là các tia được tạo ra song song với nhau.
   shadowLight = new THREE.DirectionalLight(0xffffff, 0.9);
 
   // Đặt vị trí cho nguồn sáng
@@ -27,7 +24,6 @@ export default function createLights(scene) {
   shadowLight.shadow.camera.far = 1000;
 
   // cài đặt độ phân giải của bóng đổ; càng cao càng đẹp,
-  // nhưng cũng càng nặng nề hơn
   shadowLight.shadow.mapSize.width = 2048;
   shadowLight.shadow.mapSize.height = 2048;
   shadowLight.intensity = 0.7;

@@ -21,7 +21,7 @@ class Sea {
     const geom = new THREE.TorusGeometry(350, 530, 20, 30, Math.PI * 2);
     geom.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    const oceanTexture = textureLoader.load("./oceanTexture.jpg");
+    const oceanTexture = textureLoader.load("./texture/oceanTexture.jpg");
     const mat = new THREE.MeshPhongMaterial({
       color: Color.sea,
       transparent: true,
@@ -48,7 +48,7 @@ class Sea {
       numberOfIslandRandomMax
     );
 
-    const containerTexture = textureLoader.load("./containerTexture.jpg");
+    const containerTexture = textureLoader.load("./texture/containerTexture.jpg");
 
     this.island = [];
 
